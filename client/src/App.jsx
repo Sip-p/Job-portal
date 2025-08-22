@@ -12,9 +12,11 @@ import Managejobs from './pages/Managejobs'
 import ViewApplications from './pages/ViewApplications'
 import Addjobs from './pages/Addjobs'
 import 'react-quill/dist/quill.snow.css';
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
  const App = () => {
   const [loading,setLoading]=useState(false);
-  const {showRecruiterLogin}=useContext(AppContext)
+  const {showRecruiterLogin,companyToken}=useContext(AppContext)
 useEffect(()=>{
 const timer=setTimeout(()=>
   {setLoading(false)
@@ -26,17 +28,20 @@ if(loading){return <Loading/>}
    return (
       <div>
         {showRecruiterLogin && <RecruiterLogin/>}
+             <ToastContainer/>
         <Routes>
 
           <Route path='/' element={<Home/>}/> 
           <Route path='/apply-job/:id' element={<Applyjob/>}/> 
           <Route path='/applications' element={<Applications/>}/> 
           <Route path='/dashboard' element={<DashBoard/>}>
-<Route path='managejobs' element={<Managejobs/>}/>
+          {companyToken ?<><Route path='managejobs' element={<Managejobs/>}/>
 <Route path='view-applications' element={<ViewApplications/>}/>
-<Route path='add-job' element={<Addjobs/>}/>
+<Route path='add-job' element={<Addjobs/>}/></>:null}
+ 
           </Route>
          </Routes>
+       
       </div>
    )
  }

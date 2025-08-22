@@ -1,26 +1,29 @@
 import React from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { assets } from '../assets/assets'
-
+import { useContext } from 'react'
+import { AppContext } from '../context/AppContext' 
 const DashBoard = () => {
   const navigate = useNavigate();
+  const {companyData}=useContext(AppContext)
   return (
     <div>
       <div className='flex justify-between my-3 shadow-md px-4'>
         <div>
           <img src={assets.logo} onClick={e => navigate('/')} className='cursor-pointer' />
         </div>
-        <div className='flex justify-between gap-4 '>
-          <span>Hi,Sipra</span>
+        {companyData && <div className='flex justify-between gap-4 '>
+          <span>Welcome, {companyData.name}</span>
           <div className='relative group'>
-            <img src={assets.person_icon} className='w-8 h-8 border rounded-full cursor-pointer' />
+            <img src={companyData.image} className='w-8 h-8 border rounded-full cursor-pointer' />
             <div className='absolute hidden group-hover:block  top-10 right-10 '>
               <ul className='list-none m-0 p-2 bg-white rounded-md border text-sm'>
                 <li className='py-1 px-2 cursor-pointer pr-10'>Logout</li>
               </ul>
             </div>
           </div>
-        </div>
+        </div>}
+         
       </div>
 
       <div className=' flex flex-start  '>

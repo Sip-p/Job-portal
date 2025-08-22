@@ -8,7 +8,7 @@ import { useContext } from 'react'
 const Navbar = () => {
   const {openSignIn} = useClerk();
   const {user} = useUser();
-  const {setShowRecruiterLogin}=useContext(AppContext)
+  const {setShowRecruiterLogin,companyData,companyToken}=useContext(AppContext)
   return (
     <div className='  py-2 shadow-md '> 
         <div className="container flex flex-col sm:flex-row justify-between px-4 2xl:px-20 mx-auto items-center gap-4 sm:gap-0">
@@ -19,7 +19,7 @@ const Navbar = () => {
     <div className="flex gap-4 items-center max-sm:text-xs py-2">
       <Link to="/applications">Applied Job</Link>
       <p>|</p>
-      <p className="max-sm:hidden">Hi, {user.firstName + " " + user.lastName}</p>
+      <p className="max-sm:hidden">Welcome, {companyData.company.name + " " + user.lastName}</p>
       <UserButton />
     </div>
   ) : (
