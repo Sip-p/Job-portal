@@ -14,6 +14,7 @@ import Addjobs from './pages/Addjobs'
 import 'react-quill/dist/quill.snow.css';
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
+import ChatBot from './components/ChatBot'
  const App = () => {
   const [loading,setLoading]=useState(false);
   const {showRecruiterLogin,companyToken}=useContext(AppContext)
@@ -34,14 +35,15 @@ if(loading){return <Loading/>}
           <Route path='/' element={<Home/>}/> 
           <Route path='/apply-job/:id' element={<Applyjob/>}/> 
           <Route path='/applications' element={<Applications/>}/> 
-          <Route path='/dashboard' element={<DashBoard/>}>
-          {companyToken ?<><Route path='managejobs' element={<Managejobs/>}/>
+           <Route path='/dashboard' element={<DashBoard/>}>
+          {companyToken ?<>
+          <Route path='managejobs' element={<Managejobs/>}/>
 <Route path='view-applications' element={<ViewApplications/>}/>
 <Route path='add-job' element={<Addjobs/>}/></>:null}
  
           </Route>
          </Routes>
-       
+       <ChatBot/>
       </div>
    )
  }

@@ -1,16 +1,46 @@
 import {AppContext} from '../context/AppContext';
-import {useContext,useState} from 'react';
+import {useContext,useEffect,useState} from 'react';
 import {assets,JobCategories,JobLocations,jobsData} from '../assets/assets';
 import { Link } from 'react-router-dom';
+import axios  from 'axios'
+import { toast } from 'react-toastify';
 const JobListing=()=>{
     const {searchFilter,isSearched,setSearchFilter}=useContext(AppContext);
 // let content = jobsData.length % 6;
 let arr = Array.from({ length:Math.ceil(jobsData.length/6)}).fill(0);
+const [alljob,setAlljob]=useState([])
 const [currentPage,setCurrentPage] = useState(0);
 const hasTitle = searchFilter.title.trim() !== "";
 const hasLocation = searchFilter.location.trim() !== "";
 const [categoryFilter, setCategoryFilter] = useState([]);
 const [locationFilter, setLocationFilter] = useState([]);
+const {backendUrl,appliedJobs,setAppliedJobs}=useContext(AppContext)
+const getAllJobs=async()=>{
+  const {data}=await axios.get(backendUrl+'/api/jobs')
+  console.log(data)
+
+  const updatedJobs=[...alljob,...data.jobs]
+  setAlljob(updatedJobs)
+  console.log("all jobs are",alljob)
+}
+
+const applyHandler=async()=>{
+  try {
+    if(!userData){
+      return toast.error('Login to apply for job')
+    }
+    if(!userData.resume){
+       navigate('/applications')
+      return toast.error("Upload resume to apply")
+    }
+  } catch (error) {
+    toast.error(error.message)
+  }
+}
+
+useEffect(()=>{
+getAllJobs()
+},[])
 
 const handleCategoryChange = (category) => {
   if(!categoryFilter.includes(category)) {
@@ -38,7 +68,7 @@ const setClear = () => {
 };
 
 const filteredJobs = isSearched && (hasTitle || hasLocation || categoryFilter.length > 0 || locationFilter.length > 0)
-  ? jobsData.filter(item => {
+  ? alljob.filter(item => {
       const titleMatch = hasTitle
         ? item.title.toLowerCase().includes(searchFilter.title.toLowerCase())
         : true;
@@ -54,7 +84,7 @@ const locationFilterMatch = locationFilter.length > 0
     : true;
       return titleMatch && locationMatch && categoryFilterMatch && locationFilterMatch;
     })
-  : jobsData;
+  : alljob;
 
 const paginatedJobs = filteredJobs.slice(currentPage * 6, currentPage * 6 + 6);
 
@@ -62,27 +92,27 @@ const paginatedJobs = filteredJobs.slice(currentPage * 6, currentPage * 6 + 6);
         <div className='container 2xl:px-20 mx-auto my-10 px-12  grid grid-cols-[1fr_3fr] max-sm:grid-cols-1     '>
              
  <div className='flex flex-col gap-4    shadow-lg p-2 rounded-lg    bg-gray-100   '> 
-            <div className='w-full flex my-5 lg:w-1/4 bg-green-400 px-4'>
+            <div className='w-full flex my-5 lg:w-1/4   px-4'>
 {
     isSearched && (searchFilter.title !==""|| searchFilter.location !=="") &&
-    <>
-    <h3>Current Search</h3>
-    <div className='bg-green-400 my-5'>
+    <div className='flex flex-col'>
+    <h3 className='  h-8 px-3 w-36 ml-4 pt-1 bg-gray-400'>Current Search</h3>
+    <div className=' mt-5  ml-6 w-26  '>
         {searchFilter.title && (
-            <span>
+            <span className='m p-2 flex items-center mb-2 bg-purple-400'>
 {searchFilter.title}
-<img src={assets.cross_icon} alt="cross" className='w-4 h-4 ml-2 cursor-pointer' onClick={()=>{setSearchFilter({...searchFilter,title:''})}}/>
+<img src={assets.cross_icon} alt="cross" className=' h-5 w-5 ml-2 cursor-pointer bg-white  ' onClick={()=>{setSearchFilter({...searchFilter,title:''})}}/>
             </span>
         )}
         {searchFilter.location && (
-            <span>
+            <span className='  p-2 flex items-center mb-2 bg-purple-400'>
                 {searchFilter.location}
-                <img src={assets.cross_icon} alt="cross" className='w-4 h-4 ml-2 cursor-pointer' onClick={()=>{setSearchFilter({...searchFilter,location:''})}}/>
-
+                {searchFilter.location?<img src={assets.cross_icon} alt="cross" className='h-5 w-5 ml-2 cursor-pointer bg-white ' onClick={()=>{setSearchFilter({...searchFilter,location:''})}}/>:""
+}
             </span>
         )}
     </div>
-    </>
+    </div>
 
         
 }
@@ -131,15 +161,17 @@ const paginatedJobs = filteredJobs.slice(currentPage * 6, currentPage * 6 + 6);
                 return (
                      
                     <div key={idx} className='border border-gray-500 shadow-2xl p-4 rounded-lg w-full hover:shadow-xl transition-all duration-300 ease-in-out mx-sm:h-1/2'> 
+                    
                         <img src={item.companyId.image}/>
                         <h3 className='text-lg font-semibold'>{item.title}</h3>
                         <p className='text-sm text-gray-600'>{item.companyId.name}</p>
                         <p className='text-sm text-gray-600'>{item.location}</p>
  <p   dangerouslySetInnerHTML={{__html:item.description.slice(0,150)} } className='text-sm text-gray-600 max-sm:hidden'></p>
  <Link to={`/apply-job/${item._id}`}> 
- <button className='bg-blue-500 rounded-2xl p-2 m-2 text-white' >Apply Now</button>
- <button className='bg-gray-300 rounded-2xl p-2 m-2'>Learn More</button>
- </Link>
+ <button className='bg-blue-500 rounded-2xl p-2 m-2 text-white' onClick={applyHandler}> {appliedJobs.includes(item._id)?"Applied":"Apply Now"}</button>
+  
+ <button className='bg-gray-300 rounded-2xl p-2 m-2'>Learn More</button></Link>
+  
                     </div>
                 )
             })

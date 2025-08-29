@@ -1,5 +1,6 @@
 import express from 'express'
 import { getJobById, getJobs } from '../controller/jobController.js';
+
 const router=express.Router()
 
 //route to get all job data

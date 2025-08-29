@@ -19,7 +19,7 @@ const Navbar = () => {
     <div className="flex gap-4 items-center max-sm:text-xs py-2">
       <Link to="/applications">Applied Job</Link>
       <p>|</p>
-      <p className="max-sm:hidden">Welcome, {companyData.company.name + " " + user.lastName}</p>
+      <p className="max-sm:hidden">Welcome, {user.firstName + " " + user.lastName}</p>
       <UserButton />
     </div>
   ) : (

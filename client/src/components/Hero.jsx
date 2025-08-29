@@ -20,7 +20,7 @@ console.log({
 })
 }
   return (
-    <div className='container 2xl:px-20 mx-auto my-10 max-sm:w-3/4 max-sm:mx-2   '> 
+    <div className='container 2xl:px-20 mx-auto my-10 max-sm:w-3/4 max-sm:ml-16   '> 
 <div className="bg-gradient-to-r from-purple-800 to-purple-950 text-white py-16 text-center mx-2 rounded-xl 
                  mx-sm:w-3/4 mx-sm:ml-2   ">
             <h2 className='text-2xl md:text-3xl lg:text-4xl font-medium mb-4'>Over 10,000+ jobs to apply</h2>

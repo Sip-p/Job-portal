@@ -12,7 +12,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.23",
     "@clerk/express": "^1.7.22",
+    "@google/genai": "^1.16.0",
+    "@google/generative-ai": "^0.24.1",
     "@sentry/node": "^10.4.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.7.0",
@@ -20,9 +23,11 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.19.0",
     "mongoose": "^8.17.1",
     "multer": "^2.0.2",
     "nodemon": "^3.1.10",
+    "openai": "^5.16.0",
     "svix": "^1.71.0"
   }
 }
