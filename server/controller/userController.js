@@ -87,7 +87,7 @@ export const applyForJob=async(req,res)=>{
 
 //Get user applied applications
 export const getUserJobApplications=async(req,res)=>{
-    const clerkId=req.auth.userId
+    const clerkId=req.auth().userId
 try {
     const applications=await JobApplication.find({clerkId}).populate('companyId','name email image').populate('jobId','title description location category level salary').exec()
     if(!applications){
@@ -131,8 +131,7 @@ export const updateUserResume = async (req, res) => {
     }
 
     await userData.save();
-    
-    return res.json({
+     return res.json({
       success: true,
       message: "Resume updated successfully",
       resumeUrl: userData.resume,
